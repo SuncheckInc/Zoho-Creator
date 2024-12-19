@@ -1,0 +1,10 @@
+///////// Referral Company ID Mapping and Open URL in iframe ////////////
+
+// Convert the Referral_Company_Id to long format
+abc = input.Referral_Company_Id.toLong();
+
+// Assign the long value to the field Referral_Company1
+input.Referral_Company1 = abc;
+
+// Open a URL in an iframe with the provided parameters
+openUrl("https://creatorapp.zohopublic.com/suncheck/zoho-crm/page-embed/Message/ePqUbDks0NnSH6erntxWnrO39DsVX00knnKwDMpVd30syakfvHJyeT77xA24O3J1XOPWqW4mOkSq9490KEFyguwqrxvmH8nH4WTs", "iframe", "Employee");
