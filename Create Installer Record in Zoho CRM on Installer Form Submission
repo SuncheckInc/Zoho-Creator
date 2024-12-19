@@ -1,0 +1,42 @@
+######  When the Installer form is submitted, an installer record is created in Zoho CRM within the "Installer" module #####
+
+////////// Create Record in Installer Module //////////
+
+// Initialize the map to store installer details
+installer_map = Map();
+
+// Populate the installer details from input
+installer_map.put("Name", input.What_is_your_company_name);
+installer_map.put("What_is_your_business_address", input.What_is_your_business_address);
+installer_map.put("Contact_person_Full_Name", input.Contact_person_Full_Name);
+installer_map.put("Contact_person_phone_number", input.Contact_person_phone_number);
+installer_map.put("Contact_person_email_address", input.Contact_person_email_address1);
+installer_map.put("Do_you_have_a_website", input.Do_you_have_a_website);
+installer_map.put("What_states_are_you_operating_in", input.What_states_are_you_operating_in);
+installer_map.put("Are_you_licensed_to_perform_electrical_work", input.Are_you_licensed_to_perform_electrical_work);
+installer_map.put("What_certifications_do_you_hold_related_to_solar", input.What_certifications_do_you_hold_related_to_solar_installations);
+installer_map.put("Do_you_have_liability_insurance", input.Do_you_have_liability_insurance);
+installer_map.put("Are_your_electricians_licensed_and_bonded", input.Are_your_electricians_licensed_and_bonded);
+installer_map.put("How_many_years_of_experience_do_you_have_in_solar", input.How_many_years_of_experience_do_you_have_in_solar_installations);
+
+// Additional installer questions related to PV installations, battery systems, and services
+installer_map.put("Approximately_how_many_solar_PV_installations_have", input.Approximately_how_many_solar_PV_installations_have_you_completed_in_the_last_12_months);
+installer_map.put("Approximately_how_many_battery_backup_systems_have", input.Approximately_how_many_battery_backup_systems_have_you_installed_last_month);
+installer_map.put("Are_you_familiar_with_local_permitting_and_grid", input.Are_you_familiar_with_local_permitting_and_grid_interconnection_requirements);
+installer_map.put("Are_you_capable_of_handling_full_home_battery_back", input.Are_you_capable_of_handling_full_home_battery_backup_installations);
+installer_map.put("Do_you_provide_post_installation_support", input.Do_you_provide_post_installation_support_or_maintenance);
+installer_map.put("What_brands_of_racking_and_inverters_are_you_most", input.What_brands_of_racking_and_inverters_are_you_most_experienced_with);
+installer_map.put("Do_you_have_in_house_PV_Storage_designers", input.Do_you_have_in_house_PV_Storage_designers);
+installer_map.put("How_many_additional_jobs_are_you_able_to_take_on", input.How_many_additional_jobs_are_you_able_to_take_on_per_month);
+installer_map.put("Are_you_able_to_commit_to_a_set_timeline_for", input.Are_you_able_to_commit_to_a_set_timeline_for_installations);
+installer_map.put("Do_you_subcontract_solar_and_battery_installation", input.Do_you_subcontract_solar_and_battery_installation_work);
+installer_map.put("Are_you_compliant_with_OSHA_safety_regulations", input.Are_you_compliant_with_OSHA_safety_regulations);
+installer_map.put("Can_you_offer_10_years_workmanship_warranty_on_you", input.Can_you_offer_10_years_workmanship_warranty_on_your_installations_and_5_year_roof_penetration_warr);
+installer_map.put("Are_there_any_other_services_you_offer_that_could", input.Are_there_any_other_services_you_offer_that_could_benefit_our_customers);
+installer_map.put("Do_you_have_any_questions_or_concerns_about", input.Do_you_have_any_questions_or_concerns_about_working_with_us);
+
+// Create a new record in the "Installer" module
+installer_create = zoho.crm.createRecord("Installer", installer_map);
+
+// Optionally, log the result (uncomment for debugging)
+// info installer_create;
