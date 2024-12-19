@@ -1,0 +1,70 @@
+#### We are creating a "Referral Company" module record in Zoho CRM from the Zoho Creator Company Registration form. ########
+
+//// Create a record in Referral Company module in Zoho CRM /////
+
+id = input.ID;  // Get the company referral ID from input
+first_name = input.First_Name;  // Fetch the first name of the referral
+last_name = input.Last_Name;  // Fetch the last name of the referral
+phone = input.Phone_Number;  // Fetch the phone number
+email = input.Email;  // Fetch the email address
+company_name = input.Company_Name;  // Fetch the company name
+ein_number = input.EIN_number;  // Fetch the EIN number
+owner_id = input.Owner_id;  // Fetch the owner ID
+
+// Fetch optional photos from the Zoho Creator report
+get_optional_photos = invokeurl
+[
+	url :"https://www.zohoapis.com/creator/v2.1/data/suncheck/zoho-crm/report/All_Company_Referral/" + id + "/Optional_Photos/download"
+	type :GET
+	connection:"zoho_creator"
+];
+
+// Fetch the company logo from Zoho Creator report
+get_company_logo = invokeurl
+[
+	url :"https://www.zohoapis.com/creator/v2.1/data/suncheck/zoho-crm/report/All_Company_Referral/" + id + "/Company_Logo1/download"
+	type :GET
+	connection:"zoho_creator"
+];
+
+// Combine first and last name for full name
+full_name = first_name + " " + last_name; 
+
+// Map the collected information to create a new Referral Company record in Zoho CRM
+referral_company_map = Map();
+referral_company_map.put("Owner", owner_id);
+referral_company_map.put("Full_Name", first_name);
+referral_company_map.put("Last_Name", last_name);
+referral_company_map.put("Name", company_name);
+referral_company_map.put("Phone_Number", phone);
+referral_company_map.put("Email", email);
+referral_company_map.put("EIN_number", ein_number);
+referral_company_map.put("Company_Name", company_name);
+referral_company_map.put("Company_Registration_Form_ID_in_Creator", id.toString());
+referral_company_map.put("Registration_Form_URL", "https://creatorapp.zohopublic.com/suncheck/zoho-crm/page-perma/Employee_Referral_Form1/UdFvOpgTAsttV6k091OVaWNUJ4xJGufVR4ns0wOf7xyA3gSpUQrvuMBmHCdKC5wRJYzW6UAbkB0XBYMUUJSeWRSdzPFq1GdQa5Tj?company_referral_id=" + id + "&Owner_id=" + owner_id);
+
+// Create the Referral Company record in Zoho CRM
+create_referral_company = zoho.crm.createRecord("Referral_Companies", referral_company_map);
+
+// Retrieve the newly created record's ID
+record_id = create_referral_company.getJSON("id");
+
+// Attach the optional photos to the created record in Zoho CRM
+get_optional_photos.setParamName("file");
+response = invokeurl
+[
+	url :"https://www.zohoapis.com/crm/v6/Referral_Companies/" + record_id + "/Attachments"
+	type :POST
+	files:get_optional_photos
+	connection:"crm"
+];
+
+// Attach the company logo to the created record in Zoho CRM
+get_company_logo.setParamName("file");
+response = invokeurl
+[
+	url :"https://www.zohoapis.com/crm/v6/Referral_Companies/" + record_id + "/Attachments"
+	type :POST
+	files:get_company_logo
+	connection:"crm"
+];
