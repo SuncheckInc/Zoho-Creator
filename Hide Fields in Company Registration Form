@@ -1,0 +1,10 @@
+############## Hiding the fields from Company registration form  #################
+
+hide Portal;
+hide Referral_Company_Id;
+hide Perma_Link;
+hide Employee_Form_URL;
+hide Company_Logo111;
+hide Optional_Photos1;
+hide Optional_Photos;
+hide Owner_id;
