@@ -1,0 +1,4 @@
+#### When a record is created in the Employee Registration Form, a portal invitation is sent ####
+
+create_portal = thisapp.portal.assignUserInProfile(input.Email,"Employee");
+info create_portal;
