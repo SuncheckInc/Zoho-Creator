@@ -1,0 +1,12 @@
+######### The functionality triggers when the Company Registration form is submitted, updating the "Employee Referral Form URL" field in the Company Registration form. #########
+
+// Step 1: Retrieve the company referral record based on the input ID
+rec = Company_Referral[ID == input.ID]; // Fetch the company referral record with the matching ID
+record_id = rec.ID; // Store the ID of the retrieved record for later use
+
+// Step 2: Generate the URL for the Employee Referral Form with the company referral ID as a query parameter
+input.Employee_Form_URL = "https://creatorapp.zohopublic.com/suncheck/zoho-crm/page-perma/Employee_Referral_Form1/UdFvOpgTAsttV6k091OVaWNUJ4xJGufVR4ns0wOf7xyA3gSpUQrvuMBmHCdKC5wRJYzW6UAbkB0XBYMUUJSeWRSdzPFq1GdQa5Tj?company_referral_id=" + input.ID.toLong(); 
+// Construct the Employee Referral Form URL, appending the company referral ID as a query parameter
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+openUrl("https://creatorapp.zohopublic.com/suncheck/zoho-crm/page-embed/Company_Message/TqTH5sbuXDPfOVTmR7NuTn96HsMJ4s3qsE189WCAfmWKwyy8QfXSh7sbSP5PNTpquezFTT2wwudO0HpJQtOazYjz0dYZnsQvZBEd","iframe","Company");
