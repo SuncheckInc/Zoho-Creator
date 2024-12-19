@@ -1,0 +1,27 @@
+########## The "Deal Consent" field in Zoho CRM is updated with the "Agreed to Send Disclosure" value. 
+This functionality is triggered when the button, available in the Learning App Journey of the Zoho Sign application, is clicked. ##############3
+##### ZOHO SIGN APPLICATION IN Creator ######
+
+void For_Update_Disclosure_Consent_Field(string deal_id)
+{
+    // Convert deal_id to a long type
+    deal_ids = deal_id.tolong();
+    info deal_ids; // Log the deal ID for debugging purposes
+
+    // Initialize an optional map (can be used for additional parameters if needed)
+    optional_map = Map();
+
+    // Retrieve the deal record from Zoho CRM using the deal ID
+    deal_details = zoho.crm.getRecordById("Deals", deal_ids, optional_map, "crm");
+
+    // Prepare a map to update the "Disclosure_Consent" field in the deal
+    deal_map = Map();
+    deal_map.put("Disclosure_Consent", "Agreed to send Disclosure");
+
+    // Update the deal record with the new value for the "Disclosure_Consent" field
+    update_deal = zoho.crm.updateRecord("Deals", deal_ids, deal_map, {"trigger": {"workflow"}});
+    info update_deal; // Log the update response for debugging
+
+    // Redirect the user to a thank-you page
+    openUrl("https://creatorapp.zohopublic.com/suncheck/sign-agreement/page-perma/Thank_you_for_agree/4HTqt8K31mbkKrZPNDOFmdEk0BQs9jE7ye1WN49ZqqUTqVgy83nzVhkXQWw7U9vP9mxz5CMwBf3kHrvMPKCxsa8FZSqYDseYDKMX", "same window");
+}
