@@ -1,0 +1,56 @@
+######## When the Employee Registration form is submitted in Zoho Creator, a record is created in the "Referred By" module. ########
+/////////////// Create Record in Referred By module in Zoho CRM ////////////
+
+// Retrieve input data for creating the referred by record
+id = input.ID;  // Get the referral ID
+first_name = input.First_Name;  // First name of the referral
+last_name = input.Last_Name;  // Last name of the referral
+phone = input.Phone_Number;  // Phone number of the referral
+email = input.Email;  // Email address of the referral
+owner_id = input.Owner_id;  // Owner ID
+company_registration_id = input.Referral_Company_Id;  // Get the company registration ID
+
+// Fetch the optional photos associated with the referral from Zoho Creator
+get_optional_photos = invokeurl
+[
+	url :"https://www.zohoapis.com/creator/v2.1/data/suncheck/zoho-crm/report/All_Employee_Referral_Form/" + id + "/Optional_Photos/download"
+	type :GET
+	connection:"zoho_creator"
+];
+
+// Search for the corresponding referral company in Zoho CRM using the company registration ID
+search_record = zoho.crm.searchRecords("Referral_Companies", "(Company_Registration_Form_ID_in_Creator:equals:" + company_registration_id + ")");
+if(search_record.size() > 0)
+{
+	// If a matching referral company is found, extract its ID
+	record_id = search_record.getJSON("id");
+
+	// Create a map to store the referred by record details
+	referred_by_map = Map();
+	full_name = first_name + " " + last_name;  // Combine first and last name for full name
+
+	// Map the referral details to the required fields for the "Referrals" module
+	referred_by_map.put("Employee_Form_Creator_Id", id.toString());
+	referred_by_map.put("Owner", owner_id);
+	referred_by_map.put("Name", full_name);
+	referred_by_map.put("Phone", phone);
+	referred_by_map.put("Email", email);
+	referred_by_map.put("Referral_Companies_Name", record_id);  // Associate the company
+	referred_by_map.put("Lead_Referral_Form_URL", "https://creatorapp.zohopublic.com/suncheck/zoho-crm/form-perma/Test_Form/Ov87hYJU9Tfwn57Aj4ahYPvnFk9WHUG3X87GA7rh27sK64w9KxQNvCpXQggw98QNJN3DgV9wQ67uODD1P2V6x5PyNv03FJCSQanN");
+
+	// Create the referred by record in Zoho CRM
+	create_referral_by = zoho.crm.createRecord("Referrals", referred_by_map, {"trigger": {"workflow"}});
+
+	// Retrieve the ID of the created record
+	record_id = create_referral_by.getJSON("id");
+
+	// Attach the optional photos to the newly created record
+	get_optional_photos.setParamName("file");
+	response = invokeurl
+	[
+		url :"https://www.zohoapis.com/crm/v6/Referrals/" + record_id + "/Attachments"
+		type :POST
+		files:get_optional_photos
+		connection:"crm"
+	];
+}
