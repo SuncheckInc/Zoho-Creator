@@ -1,0 +1,4 @@
+###### We are providing portal access upon the submission of the Company Registration form. #####
+
+create_portal = thisapp.portal.assignUserInProfile(input.Email,"Company");
+info create_portal;
