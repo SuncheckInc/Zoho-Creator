@@ -1,0 +1,314 @@
+####  For creating a zoho sign document based on the state and additional products ######
+#### Application ZOHO SIGN (IN CREATOR)
+
+void Sign_Agreement(string deal_id)
+{
+	deal_ids = deal_id.tolong();
+	info deal_ids;
+	optional_map = Map();
+	deal_details = zoho.crm.getRecordById("Deals",deal_ids,optional_map,"crm");
+	Customer_complete_Agreement_Timestamp = deal_details.getJSON("Customer_Complete_Agreement_Timestamp");
+	deal_name = deal_details.get("Deal_Name");
+	email = deal_details.get("Customer_Email");
+	state_project = deal_details.get("State_Project");
+	street = deal_details.get("Street_Project");
+	zipcode = deal_details.get("Zip_Code_Project");
+	city = deal_details.get("City_Project");
+	full_address = street + ", " + state_project + ", " + city + ", " + zipcode;
+	// 	info full_address;
+	additional_product = deal_details.getJSON("Additional_Product");
+	// 	info additional_product;
+	phone_number = ifnull(deal_details.get("Phone_Number"),"");
+	customer_first_name = ifnull(deal_details.get("Customer_First_Name"),"");
+	customer_last_name = ifnull(deal_details.get("Customer_Last_Name"),"");
+	full_name = customer_first_name + " " + customer_last_name;
+	// Validate required fields
+	current_date = zoho.currenttime.toString("dd MMMM yyyy");
+	// Get the related quotes from the deal
+	related_record = zoho.crm.getRelatedRecords("Quotation","Deals",deal_ids);
+	// 	info related_record;
+	if(related_record.size() > 0)
+	{
+		record_id = related_record.get(0).getJSON("id");
+		quotes = zoho.crm.getRecordById("Quotes1",record_id.toLong());
+		// 		info quotes;
+		total_system_cost = ifnull(quotes.getJSON("Total_System_Cost"),0);
+		pv_dc_system_size_w = ifnull(quotes.getJSON("PV_DC_System_Size_W"),0);
+		suncheck_amount = ifnull(quotes.getJSON("SunCheck_Amount"),0);
+		solar_installation_cost = ifnull(quotes.getJSON("Solar_Installation_Cost"),0);
+		battery_installation_cost = ifnull(quotes.getJSON("Battery_Installation_Cost"),0);
+		info battery_installation_cost;
+		total_amount = ifnull(quotes.getJSON("Total_Amount"),0);
+		info total_amount;
+		complete_agreement_timestamp = ifnull(quotes.getJSON("Customer_Complete_Agreement_Timestamp"),"");
+		// 		info complete_agreement_timestamp;
+		for each  rec in related_record
+		{
+			record_id = rec.getJSON("id");
+			info record_id;
+			quotes = zoho.crm.getRecordById("Quotes1",record_id.toLong());
+			// 		info quotes;
+			complete_agreement_timestamp = ifnull(quotes.getJSON("Customer_Complete_Agreement_Timestamp"),"");
+			info complete_agreement_timestamp;
+			if(complete_agreement_timestamp == null || complete_agreement_timestamp == "")
+			{
+				actionMap = Map();
+				fieldTextData = Map();
+				if(state_project == "CA")
+				{
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Solar Installation",solar_installation_cost);
+					fieldTextData.put("Battery Installation",battery_installation_cost);
+					fieldTextData.put("Full name",deal_name);
+					fieldTextData.put("Email",email);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Amount",total_amount);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Size 2",pv_dc_system_size_w);
+					fieldTextData.put("Size",pv_dc_system_size_w);
+					fieldTextData.put("State",state_project);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Suncheck Value",suncheck_amount);
+					fieldTextData.put("System Size",pv_dc_system_size_w);
+					fieldTextData.put("Total System Cost",total_system_cost);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip Code",zipcode);
+					fieldTextData.put("City",city);
+					template_id = 398363000000201211;
+					action_id = "398363000000201247";
+				}
+				////////////////////////////////For Solar Insure and CA State ///////////////////////////////
+				if(additional_product.contains("Solar Insure") && state_project == "CA")
+				{
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Solar Installation",solar_installation_cost);
+					fieldTextData.put("Battery Installation",battery_installation_cost);
+					fieldTextData.put("Full name",deal_name);
+					fieldTextData.put("Email",email);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Amount",total_amount);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Size 2",pv_dc_system_size_w);
+					fieldTextData.put("Size",pv_dc_system_size_w);
+					fieldTextData.put("State",state_project);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Suncheck Value",suncheck_amount);
+					fieldTextData.put("System Size",pv_dc_system_size_w);
+					fieldTextData.put("Total System Cost",total_system_cost);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip Code",zipcode);
+					fieldTextData.put("City",city);
+					template_id = 398363000000169059;
+					action_id = "398363000000169134";
+				}
+				///////////////////////////////////////////////////////////////////////////////////////////////
+				if(state_project == "TX")
+				{
+					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip code",zipcode);
+					fieldTextData.put("City",city);
+					fieldTextData.put("Suncheck Value",suncheck_amount);
+					fieldTextData.put("Client Phone Number",phone_number);
+					fieldTextData.put("Client Name",full_name);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Solar Installation Cost",solar_installation_cost);
+					fieldTextData.put("Battery Installation Cost",battery_installation_cost);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Size",pv_dc_system_size_w);
+					fieldTextData.put("Size 2",pv_dc_system_size_w);
+					fieldTextData.put("State",state_project);
+					fieldTextData.put("Amount",suncheck_amount);
+					template_id = 398363000000201363;
+					action_id = "398363000000201393";
+				}
+				///////////////////////////////////For Additional Product contain  Solar Insure  and State is TX//////////////////////////////////////////////
+				if(additional_product.contains("Solar Insure") && state_project == "TX")
+				{
+					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip code",zipcode);
+					fieldTextData.put("City",city);
+					fieldTextData.put("Amount",suncheck_amount);
+					fieldTextData.put("Suncheck Value",suncheck_amount);
+					fieldTextData.put("System Size",pv_dc_system_size_w);
+					fieldTextData.put("Client Phone Number",phone_number);
+					fieldTextData.put("Client Name",full_name);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Solar Installation Cost",solar_installation_cost);
+					fieldTextData.put("Battery Installation Cost",battery_installation_cost);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Specify W DC size",pv_dc_system_size_w);
+					fieldTextData.put("State",state_project);
+					template_id = 398363000000169243;
+					action_id = "398363000000169300";
+				}
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				if(state_project != "CA" && state_project != "TX")
+				{
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Solar Installation Cost",solar_installation_cost);
+					fieldTextData.put("Battery Installation Cost",battery_installation_cost);
+					fieldTextData.put("Full name",deal_name);
+					fieldTextData.put("Client Name",full_name);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Email",email);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Suncheck Value",suncheck_amount);
+					fieldTextData.put("State",state_project);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip Code",zipcode);
+					fieldTextData.put("City",city);
+					fieldTextData.put("System Size",pv_dc_system_size_w);
+					fieldTextData.put("Size 2",pv_dc_system_size_w);
+					fieldTextData.put("Size",pv_dc_system_size_w);
+					template_id = 398363000000201489;
+					action_id = "398363000000201522";
+				}
+				///////////////////////////////////For Additional Product contain Solar Insure and State is Other States //////////////////////////////////////////////
+				if(additional_product.contains("Solar Insure") && state_project != "CA" && state_project != "TX")
+				{
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Solar Installation Cost",solar_installation_cost);
+					fieldTextData.put("Battery Installation Cost",battery_installation_cost);
+					fieldTextData.put("Full name",deal_name);
+					fieldTextData.put("Client Name",full_name);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Email",email);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Specify W DC size",pv_dc_system_size_w);
+					fieldTextData.put("State",state_project);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip Code",zipcode);
+					fieldTextData.put("City",city);
+					template_id = 398363000000169379;
+					action_id = "398363000000169436";
+				}
+				////////////////////////////////////////////////////////////////////////////12 Dec 2024 ///////////////////////////////////////////////////////////////////////////////////////////
+				if(state_project == "NJ" || state_project == "CT" || state_project == "MA" || state_project == "NY" || state_project == "FL" || state_project == "NV" && additional_product.notContains("Backup"))
+				{
+					// Populate fieldTextData
+					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip code",zipcode);
+					fieldTextData.put("City",city);
+					fieldTextData.put("Amount",suncheck_amount);
+					fieldTextData.put("Suncheck Value",suncheck_amount);
+					fieldTextData.put("System Size",pv_dc_system_size_w);
+					fieldTextData.put("Client Phone Number",phone_number);
+					fieldTextData.put("Client Name",full_name);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Solar Installation Cost",solar_installation_cost);
+					fieldTextData.put("Battery Installation Cost",battery_installation_cost);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Size",pv_dc_system_size_w);
+					fieldTextData.put("State",state_project);
+					// Define template and action IDs
+					template_id = 398363000000287035;
+					action_id = "398363000000287056";
+				}
+				if(state_project == "NJ" || state_project == "CT" || state_project == "MA" || state_project == "NY" || state_project == "FL" || state_project == "NV" && additional_product.contains("Backup"))
+				{
+					// Populate fieldTextData
+					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Address",full_address);
+					fieldTextData.put("Phone Number",phone_number);
+					fieldTextData.put("Dated",current_date);
+					fieldTextData.put("Zip code",zipcode);
+					fieldTextData.put("City",city);
+					fieldTextData.put("Amount",suncheck_amount);
+					fieldTextData.put("Suncheck Value",suncheck_amount);
+					fieldTextData.put("System Size",pv_dc_system_size_w);
+					fieldTextData.put("Client Phone Number",phone_number);
+					fieldTextData.put("Client Name",full_name);
+					fieldTextData.put("Name of Customer",full_name);
+					fieldTextData.put("Total Amount",total_amount);
+					fieldTextData.put("Solar Installation Cost",solar_installation_cost);
+					fieldTextData.put("Battery Installation Cost",battery_installation_cost);
+					fieldTextData.put("Client Address",full_address);
+					fieldTextData.put("Address of Customer",full_address);
+					fieldTextData.put("Size",pv_dc_system_size_w);
+					fieldTextData.put("State",state_project);
+					template_id = 398363000000201489;
+					action_id = "398363000000201522";
+				}
+				///////////////////////////////////////////////////////////////////////////////12 Dec 2024 ////////////////////////////////////////////////////////////////
+				date_map = Map();
+				date_map.put("Dated",current_date);
+				date_map.put("Date",current_date);
+				fieldDataMap = Map();
+				fieldDataMap.put("field_text_data",fieldTextData);
+				fieldDataMap.put("field_date_data",date_map);
+				actionMap.put("field_data",fieldDataMap);
+				eachActionMap1 = Map();
+				eachActionMap1.put("recipient_name",deal_name);
+				eachActionMap1.put("recipient_email",email);
+				eachActionMap1.put("action_type","SIGN");
+				eachActionMap1.put("role","Customer");
+				eachActionMap1.put("verify_recipient","false");
+				eachActionMap1.put("action_id",action_id);
+				eachActionMap1.put("is_embedded",true);
+				fieldList = List();
+				fieldList.add(eachActionMap1);
+				actionMap.put("actions",fieldList);
+				submitMap = Map();
+				submitMap.put("templates",actionMap);
+				parameters = Map();
+				parameters.put("is_quicksend","true");
+				parameters.put("data",submitMap);
+				// Create the Zoho Sign document
+				sign_document = zoho.sign.createUsingTemplate(template_id,parameters,"crm1");
+				// 			info sign_document;
+				zs_request_id = sign_document.get("requests").get("request_id");
+				zs_action_id = sign_document.get("requests").get("actions").get(0).get("action_id");
+				zs_document_id = sign_document.get("requests").get("document_ids").get(0).get("document_id");
+				// 	info "zs_document_id == " + zs_document_id;
+				url2 = "https://sign.zoho.com/api/v1/requests/" + zs_request_id + "/actions/" + zs_action_id + "/embedtoken?host=https://crm.zoho.com/";
+				embedded_url = invokeurl
+				[
+					url :url2
+					type :POST
+					connection:"crm1"
+				];
+				sign_url = embedded_url.get("sign_url");
+				info sign_url;
+				openUrl(sign_url,"same window");
+				// Update the deal record with the sign URL
+				deal_map = Map();
+				deal_map.put("Zoho_Sign_URL",sign_url);
+				deal_map.put("Request_Id",zs_request_id);
+				deal_map.put("Document_Id",zs_document_id);
+				update_deal = zoho.crm.updateRecord("Deals",deal_ids,deal_map,{"trigger":{"workflow"}});
+			}
+		}
+	}
+	else
+	{
+		openUrl("https://creatorapp.zohopublic.com/suncheck/sign-agreement/page-perma/Agreement_Already_Signed/wCFeVHQ9rOtTzkuKFC90dRMuRSuu33RYBArPsxA22tBxem88PZJyE052qvSM3zu9Sy5rYJQGafVrWRVApCtjK0edvxsGFm4O7VFa","same window");
+	}
+}
