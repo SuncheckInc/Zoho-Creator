@@ -1,0 +1,7 @@
+####### Hide the fields in employee registration form on the load of a form #########
+
+hide Referral_Company_Id;
+hide Optional_Photos11;
+hide Referral_Company;
+hide Owner_id;
+hide Referral_Company1;
