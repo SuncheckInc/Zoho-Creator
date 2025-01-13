@@ -111,6 +111,7 @@ void Sign_Agreement(string deal_id)
 				if(state_project == "TX")
 				{
 					fieldTextData.put("Name",full_name);
+					fieldTextData.put("Full name",deal_name);
 					fieldTextData.put("Address",full_address);
 					fieldTextData.put("Phone Number",phone_number);
 					fieldTextData.put("Dated",current_date);
@@ -119,6 +120,7 @@ void Sign_Agreement(string deal_id)
 					fieldTextData.put("Suncheck Value",suncheck_amount);
 					fieldTextData.put("Client Phone Number",phone_number);
 					fieldTextData.put("Client Name",full_name);
+					fieldTextData.put("Email",email);
 					fieldTextData.put("Name of Customer",full_name);
 					fieldTextData.put("Total Amount",total_amount);
 					fieldTextData.put("Solar Installation Cost",solar_installation_cost);
